@@ -1,0 +1,28 @@
+* {
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.BoggleMenu {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 75px;
+}
+
+.BoggleMenu > div {
+    background-color: grey;
+    height: 75px;
+    border: 1px solid white;
+}
+
+
+.BoggleMenu > div:hover {
+    background-color: lightgrey;
+    height: 75px;
+    border: 1px solid white;
+    transition-duration: .5s;
+    transition-delay: .05s;
+    
+   
+}

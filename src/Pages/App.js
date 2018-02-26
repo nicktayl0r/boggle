@@ -1,5 +1,6 @@
 import React from 'react';
-import render from 'react-router'
+import './App.css'
+
 class App extends React.Component {
     constructor(props) {
         super();
@@ -10,7 +11,20 @@ class App extends React.Component {
     
     render() {
         return (
-            <div>Wilkommen</div>
+
+            <div>
+                <h1>Lets Play Boggle</h1>
+                <h2>Login</h2>
+                <h2>Signup</h2>
+                <div className="BoggleMenu">
+                    <div>Create Game</div>
+                    <div>Join Game</div>
+                    <div>High Scores</div>
+                    <div>How to Play</div>
+                </div>
+
+            </div>
+
         )
     }
 }
