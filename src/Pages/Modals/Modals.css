@@ -1,0 +1,20 @@
+th, tr, td {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin: 0px;
+    
+}
+
+table {
+    border-collapse: collapse;
+
+}
+
+.Rules > div {
+    text-align: left;
+    text-indent: 20px;
+}
+
+table {
+    margin: 0 auto;
+}
