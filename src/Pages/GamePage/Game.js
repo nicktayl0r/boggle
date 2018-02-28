@@ -4,7 +4,7 @@ import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed'
 import './Game.css'
 
 
-let diceArray = [
+let dice = [
     ['R', 'I', 'F', 'O', 'B', 'X'],
     ['I', 'F', 'E', 'H', 'E', 'Y'],
     ['D', 'E', 'N', 'O', 'W', 'S'],
@@ -32,11 +32,21 @@ class Game extends React.Component {
             players: []
         }
     }
+
+    newRound = () => {
+        let inDice = dice.slice(0);
+        let outDice =[];
+        for (let i in inDice) {
+            let randIndex = Math.floor(inDice.length*Math.random());
+            outDice.push(inDice[randIndex]);
+            inDice.splice(randIndex, 0);
+        }
+        let gameboard = outDice.map(x => x[Math.floor(Math.random()*6)]);
+        this.setState({round: gameboard})
+    }
     
     componentDidMount (){
-        let gameboard = diceArray.map(x => x[Math.floor(Math.random()*6)]);
-        this.setState = ( this.state.round= gameboard )
-        console.log(this.state.round)
+        this.newRound();
     }
 
     roundTimer = () => {
@@ -45,22 +55,19 @@ class Game extends React.Component {
     }
 
     wordValidator = () => {
-
+        alert('false')
     }
 
     render(){
         return(
             <div>
-
                 <h3><em>“A serious and good philosophical work could be written consisting entirely of games of Boggle...</em></h3>
                 <span>-Ludwig Wittgenstein</span>
                 <br/>
                 <br/>
-                <br/>
-
                 <GameBoard 
                     round={this.state.round}
-
+                    newRound={this.newRound}
                 />
                 <PlayerFeed />
             </div>

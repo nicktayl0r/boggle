@@ -3,16 +3,20 @@ import './BoggleMatrix.css'
 
 
 const BoggleMatrix = (props) => {
+    
     return(
-        <div className="BoggleMatrix">
-            {
-                props.round.map((letter, idx) => (
-                    <div key={letter+idx}>
-                        <span>{letter}</span>
-                    </div>
-                ))
-            }
-
+        <div>
+            <button onClick={() => props.newRound()}> New Round</button>
+            <div className="BoggleMatrix">
+                {
+                    props.round.map((letter, idx) => (
+                        <div key={letter+idx}>
+                            <span>{letter}</span>
+                        </div>
+                    ))
+                }
+                
+            </div>
         </div>
     )
 

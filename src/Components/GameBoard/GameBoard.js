@@ -2,11 +2,16 @@ import React from 'react';
 import BoggleMatrix from './../BoggleMatrix/BoggleMatrix';
 import WordInput from './../WordInput/WordInput';
 import Timer from './../Timer/Timer';
+import './GameBoard.css'
 
 const GameBoard = (props) => {
     return (
-        <div>
-            <BoggleMatrix round={props.round} />
+        <div className="GameBoard">
+           
+            <BoggleMatrix 
+                round={props.round}
+                newRound={props.newRound}
+             />
             <WordInput />
             <Timer />
         </div>
