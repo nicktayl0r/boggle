@@ -7,12 +7,13 @@ import './GameBoard.css'
 const GameBoard = (props) => {
     return (
         <div className="GameBoard">
-           
             <BoggleMatrix 
                 round={props.round}
                 newRound={props.newRound}
              />
-            <WordInput />
+            <WordInput 
+                wordValidator={props.wordValidator}
+            />
             <Timer />
         </div>
     )
