@@ -4,11 +4,11 @@ import './Modals.css';
 const Rules = () => {
     return(
         <div className="Rules">
-            <h1>How to Play Boggle</h1>
+            <h1>How to Play</h1>
             <blockquote>
                 <em>'Freedom is nothing but a chance to play boggle'</em> - Albert Camus
             </blockquote>
-            <div>To win Boggle you must score the most points over a series of rounds, with each round being 3 minutes long. Points are given based on the length of the given word.</div>
+            <div>To win Boggle you must score the most points over a predetermined number of rounds, with each round being 3 minutes long. Points are given based on the length of each submitted word.</div>
             <br/>
             <div>You may not enter the same word twice and you can only use the same letter tile once. Words must be at least 3 characters long.</div>
             <br/>
@@ -20,7 +20,7 @@ const Rules = () => {
                 <tbody>
                     <tr>
                         <th>Points</th>
-                        <th>Length</th>
+                        <th>Letters</th>
                     </tr>
                     <tr>
                         <td>1</td>
