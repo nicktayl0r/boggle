@@ -31,7 +31,6 @@ class Game extends React.Component {
             host: props.user,
             round: [],
             players: []
-
         }
     }
 
@@ -59,11 +58,16 @@ class Game extends React.Component {
     wordValidator = (word) => {
         // For a word two conditions must be met...
         let round = this.state.round
+        let wordString = word;
         let boardIndices = [];
-        let isInBoard = false;
-        let isInDictionary = false;
-        // The first condition is that the word must exist in a list of all english words
+        
+        let usedIdx = [];
+        let wordBin = [];
 
+        let isInDictionary = false;
+        let isInBoard = false;
+        
+        // The first condition is that the word must exist in a list of all english words
         if(words.includes(word)) {
             isInDictionary = true;
         }
@@ -73,82 +77,99 @@ class Game extends React.Component {
                 boardIndices.push(i);
             }
         }
-        function crawl(index){
-            let neighbors = [];
-            if (index === 5 || index === 6 || index === 9 || index === 10 ){
-                neighbors.push(index-5);
-                neighbors.push(index-4);
-                neighbors.push(index-3);
-                neighbors.push(index-1);
-                neighbors.push(index+1);
-                neighbors.push(index+3);
-                neighbors.push(index+4);
-                neighbors.push(index+5);
+
+        startCrawl(boardIndices);
+
+        function startCrawl(indices) {
+            for(let b of indices){
+                crawlBoard(b, wordString)
             }
-            if (index === 1 || index === 2) {
-                neighbors.push(index-1)
-                neighbors.push(index+1)
-                neighbors.push(index+4)
-                neighbors.push(index+3)
-                neighbors.push(index+5)
-            }
-            if(index === 14 || index === 13){
-                neighbors.push(index-1)
-                neighbors.push(index+1)
-                neighbors.push(index-4)
-                neighbors.push(index-3)
-                neighbors.push(index-5)
-            }
-            if(index === 4 || index === 8){
-                neighbors.push(index+1);
-                neighbors.push(index+4);
-                neighbors.push(index-4);
-                neighbors.push(index+5);
-                neighbors.push(index-3);
-            }
-            if(index === 11 || index === 7){
-                neighbors.push(index-4);
-                neighbors.push(index+4);
-                neighbors.push(index-1);
-                neighbors.push(index-5);
-                neighbors.push(index+3);
-            }
-            if(index === 0){
-                neighbors.push(1)
-                neighbors.push(4)
-                neighbors.push(5)
-            }
-            if(index === 3){
-                neighbors.push(2)
-                neighbors.push(3)
-                neighbors.push(7)
-            }
-            if(index === 12){
-                neighbors.push(8)
-                neighbors.push(9)
-                neighbors.push(13)
-            }
-            if(index === 15){
-                neighbors.push(10)
-                neighbors.push(11)
-                neighbors.push(14)
-            }
-            return neighbors;
         }
-        // now we crawl recursivly for each instance of the first letter, being mindful of the 'Qu' tiles
-        for(let i in boardIndices){
-            let neighbors = crawl(parseInt(boardIndices[i], 10));
-            
-            
-            
+        function crawlBoard(idx, thisWord){
+            let nIdx = getNeighbors(idx);
+            let nLtrIdx = [];     
+            wordBin.push(thisWord.split('').shift());
+            thisWord = thisWord.slice(1);
+            if (thisWord.length === 0) { 
+                return isInBoard = true };
+            for(let n of nIdx){
+                if (round[n] === thisWord[0].toUpperCase() && !usedIdx.includes(n)) {
+                    nLtrIdx.push(n);
+                };
+            }
+            if(nLtrIdx.length > 0){
+                for(let n of nLtrIdx){  
+                    usedIdx.push(n);
+                    crawlBoard(n, thisWord);
+                }
+            } else {
+                usedIdx.pop()
+                thisWord = wordBin.pop() + thisWord;
+            }
+            return false;
+        }
             
 
-        }
-
-        if (isInBoard && isInDictionary) {
-            alert('this is a valid entry')
-        }
-        
+            function getNeighbors(index){
+                index = parseInt(index, 10);
+                let neighbors = [];
+                if (index === 5 || index === 6 || index === 9 || index === 10 ){
+                    neighbors.push(index-5);
+                    neighbors.push(index-4);
+                    neighbors.push(index-3);
+                    neighbors.push(index-1);
+                    neighbors.push(index+1);
+                    neighbors.push(index+3);
+                    neighbors.push(index+4);
+                    neighbors.push(index+5);
+                }
+                if (index === 1 || index === 2) {
+                    neighbors.push(index-1)
+                    neighbors.push(index+1)
+                    neighbors.push(index+4)
+                    neighbors.push(index+3)
+                    neighbors.push(index+5)
+                }
+                if(index === 14 || index === 13){
+                    neighbors.push(index-1)
+                    neighbors.push(index+1)
+                    neighbors.push(index-4)
+                    neighbors.push(index-3)
+                    neighbors.push(index-5)
+                }
+                if(index === 4 || index === 8){
+                    neighbors.push(index+1);
+                    neighbors.push(index+4);
+                    neighbors.push(index-4);
+                    neighbors.push(index+5);
+                    neighbors.push(index-3);
+                }
+                if(index === 11 || index === 7){
+                    neighbors.push(index-4);
+                    neighbors.push(index+4);
+                    neighbors.push(index-1);
+                    neighbors.push(index-5);
+                    neighbors.push(index+3);
+                }
+                if(index === 0){
+                    neighbors.push(1, 4, 5)
+                }
+                if(index === 3){
+                    neighbors.push(2, 3, 7)
+                }
+                if(index === 12){
+                    neighbors.push(8, 9, 13)
+                }
+                if(index === 15){
+                    neighbors.push(10, 11, 14)
+                }
+                return neighbors;
+            }
+            if(isInBoard && isInDictionary){
+                alert('you savage ayye eff');
+            }
+            console.log(isInBoard);
+            console.log(isInDictionary);
     }
 
     render(){

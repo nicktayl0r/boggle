@@ -7,6 +7,7 @@
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",
+    "fs": "0.0.1-security",
     "history": "^4.7.2",
     "jsonwebtoken": "^8.1.1",
     "materialize-css": "^0.100.2",
@@ -21,7 +22,9 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "^1.1.1",
     "serve-favicon": "^2.4.5",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "word-list": "^2.0.0",
+    "wordlist-english": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

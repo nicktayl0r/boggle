@@ -1,10 +1,11 @@
 import React from 'react';
+import './Timer.css';
 
 
 const Timer = (props) => {
     return (
-        <div>
-            This is the timer
+        <div className='Timer'>
+            3:00:00
         </div>
     )
 };
