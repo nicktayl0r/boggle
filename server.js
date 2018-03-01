@@ -29,19 +29,8 @@ app.get('/*', function(req, res) {
 
 var port = process.env.PORT || 3001;
 
-app.listen(port, function() {
+const server = app.listen(port, function() {
   console.log(`Express app running on port ${port}`)
 });
 
-io.on('connection', (client) => {
-  client.on('subscribeToTimer', (interval) => {
-      console.log('client is subscribing to timer with interval', interval);
-      setInterval(() => {
-          client.emit('timer', new Date());
-      }, interval)
-  });
-});
-
-const thisPort = 3002
-io.listen(thisPort);
-console.log('socket.io is listening on port', thisPort);
+require('./io').attach(server);
