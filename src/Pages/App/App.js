@@ -7,14 +7,21 @@ import Signup from '../SignupPage/Signup';
 import Login from '../LoginPage/Login';
 import Scores from '../ScoresPage/Scores';
 import Game from '../GamePage/Game';
+import { subscribeToTimer } from './../../api';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showModal: false,
-            fizz: "buzz"
+            fizz: "buzz",
+            timestamp: 'no timestamp yet'
         }
+        
+        subscribeToTimer((err, timestamp) => this.setState({
+            timestamp
+        }));
+
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
     }
@@ -62,6 +69,7 @@ class App extends React.Component {
                             showModal={this.state.showModal}
                             user={this.state.user}
                             handleLogout={this.handleLogout}
+                            timestamp={this.state.timestamp}
                             />
                         } />
                         <Route exact path='/signup' render={(props) =>

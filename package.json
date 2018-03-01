@@ -23,6 +23,7 @@
     "react-scripts": "^1.1.1",
     "serve-favicon": "^2.4.5",
     "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
     "word-list": "^2.0.0",
     "wordlist-english": "^1.2.0"
   },
