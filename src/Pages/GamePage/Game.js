@@ -30,10 +30,44 @@ class Game extends React.Component {
         this.state = {
             host: props.user,
             round: [],
-            players: []
+            players: [],
+            countdown: 30,
+            pWords: [],
+            pScore: 0
         }
     }
 
+    handleScore = (w) => {
+            console.log(w);
+            switch(w.length) {
+                case 3:
+                    this.setState({pScore: this.state.pScore+1});
+                    break;
+                case 4:
+                    this.setState({pScore: this.state.pScore+1});
+                    break;
+                case 5:
+                    this.setState({pScore: this.state.pScore+2});
+                    break;
+                case 6:
+                    this.setState({pScore: this.state.pScore+3});
+                    break;
+                case 7:
+                    this.setState({pScore: this.state.pScore+5});
+                    break;
+                default:
+                    this.setState({pScore: this.state.pScore+11});
+                    
+            }
+        
+    }
+
+
+    handleTick = () => {
+        this.setState((c) => ({
+            countdown: --c.countdown
+        }));
+    }
     newRound = () => {
         let inDice = dice.slice(0);
         let outDice =[];
@@ -43,16 +77,11 @@ class Game extends React.Component {
             inDice.splice(randIndex, 0);
         }
         let gameboard = outDice.map(x => x[Math.floor(Math.random()*6)]);
-        this.setState({round: gameboard})
+        this.setState({round: gameboard, countdown: 30})
     }
     
     componentDidMount (){
         this.newRound();
-    }
-
-    roundTimer = () => {
-        setTimeout(function(){
-        }, 180000)
     }
 
     wordValidator = (word) => {
@@ -108,8 +137,6 @@ class Game extends React.Component {
             }
             return false;
         }
-            
-
             function getNeighbors(index){
                 index = parseInt(index, 10);
                 let neighbors = [];
@@ -165,11 +192,20 @@ class Game extends React.Component {
                 }
                 return neighbors;
             }
-            if(isInBoard && isInDictionary){
-                alert('you savage ayye eff');
+            if(isInBoard && isInDictionary && word.length > 2){
+                console.log('thats a go')
             }
             console.log(isInBoard);
             console.log(isInDictionary);
+            console.log(this.state.pWords);
+            console.log(this.state.pScore);
+
+            this.setState(() => {
+                if(!this.state.pWords.includes(word)){
+                    pWords: this.state.pWords.push(word);
+                    this.handleScore(word);
+                }
+            })
     }
 
     render(){
@@ -183,6 +219,10 @@ class Game extends React.Component {
                     round={this.state.round}
                     newRound={this.newRound}
                     wordValidator={this.wordValidator}
+                    countdown={this.state.countdown}
+                    handleTick={this.handleTick}
+                    pScore={this.state.pScore}
+                    handleScore={this.state.score}
                 />
                 <PlayerFeed />
             </div>

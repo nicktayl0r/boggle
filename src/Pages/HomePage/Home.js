@@ -9,6 +9,10 @@ const Home = (props) => {
     return (
         <div>
         <h1>Boggle? Boggle!</h1>
+        
+        <h4><em>"No man is hurt but by Boggle.</em></h4>
+        <h5>-Diogenes of Sinope</h5>
+        
         <NavBar 
             user={props.user}
             handleLogout={props.handleLogout}

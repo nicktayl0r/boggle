@@ -13,8 +13,14 @@ const GameBoard = (props) => {
              />
             <WordInput 
                 wordValidator={props.wordValidator}
+                countdown={props.countdown}
+                pScore={props.pScore}
+                handleScore={props.handleScore}
             />
-            <Timer />
+            <Timer
+                handleTick={props.handleTick}
+                countdown={props.countdown}
+            />
         </div>
     )
 };

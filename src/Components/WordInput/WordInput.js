@@ -2,16 +2,40 @@ import React from 'react';
 import './WordInput.css'
 
 class WordInput extends React.Component {
+
+    componentDidMount(){
+        console.log(this.props.pScore)
+        if(this.props.timer === 0) {
+            this.props.handleScore();
+        }
+    }
+
     render(){
-        return (
-            <div className="WordInput">
-                <div className="WordFeedback">
-                    Enter a word, Bucko
-                </div>
-                <input type="text" placeholder="Enter an English word" ref="word"/>
-                <button onClick={() => this.props.wordValidator(this.refs.word.value)}>Submit</button>
-            </div>
-        )
+        {
+            if(this.props.countdown > 0 ){
+                return (
+                    <div className="WordInput">
+                        <div className="WordFeedback">
+                            You may enter a word, your score is {this.props.pScore}
+                        </div>
+                        <input type="text" placeholder="..." ref="word"/>
+                        <button onClick={() => {this.props.wordValidator(this.refs.word.value); this.refs.word.value=''}}>Submit</button>
+                    </div>
+                )
+
+            } else {
+                return (
+                    <div className="WordInput">
+                        <div className="WordFeedback">
+                            You scored: {this.props.pScore}
+                        </div>
+                        <input type="text" placeholder="Out of time, papi" ref="word"/>
+                        <button onClick={() => alert('You cant enter words anymore, you dingus')}>Submit</button>
+                    </div>
+                )
+            }
+
+        }
     }
 };
 

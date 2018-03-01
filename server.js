@@ -2,10 +2,8 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-
-
-
-
+var bodyParser = require('body-parser');
+const io = require('socket.io')();
 
 require('dotenv').config();
 require('./config/db');
