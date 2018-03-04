@@ -1,0 +1,11 @@
+.vaporwave { 
+    text-shadow:-.07rem -.07rem 0 #6BFFFF, .0625rem .0625rem 0 #FF819E;
+    
+}
+
+.vaporwave:hover { 
+    text-shadow: -.07rem .07rem 0 #6BFFFF, .0625rem -.0625rem 0 #FF819E;
+    transition-delay: .5s;
+    
+    
+}

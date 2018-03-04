@@ -10,7 +10,7 @@ const BoggleMatrix = (props) => {
             <div className="BoggleMatrix">
                 {
                     props.round.map((letter, idx) => (
-                        <div key={letter+idx}>
+                        <div className="vaporwave" key={letter+idx}>
                             <span>{letter}</span>
                         </div>
                     ))

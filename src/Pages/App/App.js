@@ -7,7 +7,8 @@ import Signup from '../SignupPage/Signup';
 import Login from '../LoginPage/Login';
 import Scores from '../ScoresPage/Scores';
 import Game from '../GamePage/Game';
-import { subscribeToTimer } from './../../api';
+
+
 
 class App extends React.Component {
     constructor(props) {
@@ -18,9 +19,9 @@ class App extends React.Component {
             timestamp: 'no timestamp yet'
         }
         
-        subscribeToTimer((err, timestamp) => this.setState({
-            timestamp
-        }));
+        // subscribeToTimer((err, timestamp) => this.setState({
+        //     timestamp
+        // }));
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -88,7 +89,7 @@ class App extends React.Component {
                             <Scores />
                         } />
                         <Route exact path='/game' render={() =>
-                            <Game host={this.state.user} />
+                            <Game user={this.state.user} />
                         } />
                     </Switch>
                 </Router>

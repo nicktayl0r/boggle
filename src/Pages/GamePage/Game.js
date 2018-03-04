@@ -3,6 +3,7 @@ import GameBoard from '../../Components/GameBoard/GameBoard'
 import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed'
 import './Game.css';
 import words from 'an-array-of-english-words';
+import {userJoin} from './../../api';
 
 
 let dice = [
@@ -28,40 +29,39 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            host: props.user,
+            host: '',
+            roundCount: 0,
             round: [],
-            players: [],
-            countdown: 30,
-            pWords: [],
-            pScore: 0
+            countdown: 180,
+            pScore: 0,
+            pWords: []
         }
-    }
-
-    handleScore = (w) => {
-            console.log(w);
-            switch(w.length) {
-                case 3:
-                    this.setState({pScore: this.state.pScore+1});
-                    break;
-                case 4:
-                    this.setState({pScore: this.state.pScore+1});
-                    break;
-                case 5:
-                    this.setState({pScore: this.state.pScore+2});
-                    break;
-                case 6:
-                    this.setState({pScore: this.state.pScore+3});
-                    break;
-                case 7:
-                    this.setState({pScore: this.state.pScore+5});
-                    break;
-                default:
-                    this.setState({pScore: this.state.pScore+11});
-                    
-            }
         
     }
 
+
+    handleScore(w) {
+        console.log(w);
+        switch(w.length) {
+            case 3:
+                this.setState({pScore: this.state.pScore+1});
+                break;
+            case 4:
+                this.setState({pScore: this.state.pScore+1});
+                break;
+            case 5:
+                this.setState({pScore: this.state.pScore+2});
+                break;
+            case 6:
+                this.setState({pScore: this.state.pScore+3});
+                break;
+            case 7:
+                this.setState({pScore: this.state.pScore+5});
+                break;
+            default:
+                this.setState({pScore: this.state.pScore+11});   
+        }
+    }
 
     handleTick = () => {
         this.setState((c) => ({
@@ -71,20 +71,28 @@ class Game extends React.Component {
     newRound = () => {
         let inDice = dice.slice(0);
         let outDice =[];
-        for (let i in inDice) {
+        while(inDice.length > 0) {
             let randIndex = Math.floor(inDice.length*Math.random());
+            console.log(inDice)
             outDice.push(inDice[randIndex]);
-            inDice.splice(randIndex, 0);
+            inDice.splice(randIndex, 1);
         }
         let gameboard = outDice.map(x => x[Math.floor(Math.random()*6)]);
         this.setState({round: gameboard, countdown: 30})
+    
     }
     
-    componentDidMount (){
+    componentDidMount (){ 
+        
         this.newRound();
+        console.log("component has mounted!")
+        userJoin(this.state.host);
+
     }
 
     wordValidator = (word) => {
+        console.log(word)
+        
         // For a word two conditions must be met...
         let round = this.state.round
         let wordString = word;
@@ -101,9 +109,13 @@ class Game extends React.Component {
             isInDictionary = true;
         }
         // next, we get the the number of occurances of the first tile in our board
+
         for(let i in round) {
-            if(round[i] === word.slice(0, round[i].length).toUpperCase()){
+            console.log(round)
+            if(round[i].toUpperCase() === word.slice(0, round[i].length).toUpperCase()){
                 boardIndices.push(i);
+
+
             }
         }
 
@@ -114,11 +126,23 @@ class Game extends React.Component {
                 crawlBoard(b, wordString)
             }
         }
+        
         function crawlBoard(idx, thisWord){
+            console.dir(idx);
+            console.dir(thisWord);
             let nIdx = getNeighbors(idx);
-            let nLtrIdx = [];     
-            wordBin.push(thisWord.split('').shift());
-            thisWord = thisWord.slice(1);
+            let nLtrIdx = [];
+
+            console.log(wordBin);
+            if (thisWord[0].toUpperCase() == 'Q') {
+                wordBin.push(thisWord.substr(0, 2));
+                thisWord = thisWord.slice(2);
+            } else {
+                wordBin.push(thisWord.split('').shift());
+                thisWord = thisWord.slice(1);
+            }
+
+            console.log(thisWord)
             if (thisWord.length === 0) { 
                 return isInBoard = true };
             for(let n of nIdx){
@@ -193,25 +217,19 @@ class Game extends React.Component {
                 return neighbors;
             }
             if(isInBoard && isInDictionary && word.length > 2){
-                console.log('thats a go')
+                this.setState(() => {
+                    if(!this.state.pWords.includes(word) ){
+                        pWords: this.state.pWords.push(word);
+                        this.handleScore(word);
+                    }
+                })
             }
-            console.log(isInBoard);
-            console.log(isInDictionary);
-            console.log(this.state.pWords);
-            console.log(this.state.pScore);
-
-            this.setState(() => {
-                if(!this.state.pWords.includes(word)){
-                    pWords: this.state.pWords.push(word);
-                    this.handleScore(word);
-                }
-            })
     }
 
     render(){
         return(
             <div>
-                <h3><em>“A serious and good philosophical work could be written consisting entirely of games of Boggle..."</em></h3>
+                <h3 className='vaporwave'><em>“A serious and good philosophical work could be written consisting entirely of games of Boggle..."</em></h3>
                 <span>-Ludwig Wittgenstein</span>
                 <br/>
                 <br/>

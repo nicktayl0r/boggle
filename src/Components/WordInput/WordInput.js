@@ -4,7 +4,6 @@ import './WordInput.css'
 class WordInput extends React.Component {
 
     componentDidMount(){
-        console.log(this.props.pScore)
         if(this.props.timer === 0) {
             this.props.handleScore();
         }
@@ -29,7 +28,7 @@ class WordInput extends React.Component {
                         <div className="WordFeedback">
                             You scored: {this.props.pScore}
                         </div>
-                        <input type="text" placeholder="Out of time, papi" ref="word"/>
+                        <input type="text" placeholder="Round Over" ref="word"/>
                         <button onClick={() => alert('You cant enter words anymore, you dingus')}>Submit</button>
                     </div>
                 )

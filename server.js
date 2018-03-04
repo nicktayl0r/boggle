@@ -14,10 +14,8 @@ app.use(logger('dev'));
 
 //app.use(favicon(path.join(__dirname, 'build', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'build')));
-
-
 app.use(require('./config/auth'));
-
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use('/api/users', require('./routes/api/users'));

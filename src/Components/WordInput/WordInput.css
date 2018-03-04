@@ -1,9 +1,19 @@
-
-button {
+.WordInput{
+    
+    margin: 0 auto;
+}
+.WordInput > button {
     background-color: purple;
     color: white;
     float: none;
+    height: 32px;
+    margin: none;
 }
-button:hover {
+.WordInput > button:hover {
     background-color: violet;
 }
+
+.WordInput > input {
+    font-size: 24px;
+}
+
