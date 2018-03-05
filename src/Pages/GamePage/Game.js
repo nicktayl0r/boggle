@@ -3,7 +3,7 @@ import GameBoard from '../../Components/GameBoard/GameBoard'
 import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed'
 import './Game.css';
 import words from 'an-array-of-english-words';
-import {userJoin, newRound, startGame} from './../../api';
+import {userJoin, newRound, startGame, endGame} from './../../api';
 
 
 class Game extends React.Component {
@@ -12,29 +12,32 @@ class Game extends React.Component {
         this.state = {
             isActive: false,
             round: [],
-            countdown: 0,
+            countdown: -1,
             pScore: 0,
             pWords: [],
-            players: ['dean', 'jimmy'],
+            players: [],
             users: [props.user.name],
-
         }
        startGame(this.handleGame);
        userJoin(this.state.users[0], this.getUsers);
        
-        
+    }
+
+    handleGameOver = (c) => {
+        if(c === 0){
+            alert('oh boy, looks like the game is over')
+        }
     }
 
     handleGame =(obj) =>{
         let players = [];
-        
         players.push(obj['players'][0]['user'])
         players.push(obj['players'][1]['user'])
         this.setState({
             isActive: true,
             round: obj['round'],
             players: players,
-            countdown: 240
+            countdown: 20
         })
         
     }
@@ -73,14 +76,19 @@ class Game extends React.Component {
         this.setState((c) => ({
             countdown: --c.countdown
         }));
+
+        let pIndex = this.state.players.indexOf(this.state.users[0]);
+        if(this.state.countdown === 0){
+            endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
+        }
     }
     
     componentDidMount() {
         console.log("component has mounted!")
+        
     }
 
     wordValidator = (word) => {
-        
         // For a word two conditions must be met...
         let round = this.state.round
         let wordString = word;
@@ -214,6 +222,7 @@ class Game extends React.Component {
                         <span>-Ludwig Wittgenstein</span>
                         <br/>
                         <h3>Boggle Time!</h3>
+                        <h4>{this.state.users}</h4>
                         <h4> {this.state.players[0]} vs. {this.state.players[1]}</h4>
                         <br/>
                     <GameBoard

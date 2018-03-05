@@ -6,7 +6,6 @@ const BoggleMatrix = (props) => {
     
     return(
         <div>
-            <button onClick={() => props.newRound()}> New Round</button>
             <div className="BoggleMatrix">
                 {
                     props.round.map((letter, idx) => (
@@ -15,7 +14,6 @@ const BoggleMatrix = (props) => {
                         </div>
                     ))
                 }
-                
             </div>
         </div>
     )

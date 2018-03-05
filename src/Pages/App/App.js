@@ -18,10 +18,6 @@ class App extends React.Component {
             fizz: "buzz",
             timestamp: 'no timestamp yet'
         }
-        
-        // subscribeToTimer((err, timestamp) => this.setState({
-        //     timestamp
-        // }));
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);

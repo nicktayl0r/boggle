@@ -37,12 +37,12 @@ let dice = [
 
 io.on('connection', (client) => {
     console.log(`Client ${client.id} is connected at ${new Date().toISOString()}.`);
+    console.log(users);
     client.join('lobby')
     client.on('users-in-lobby', (user) => {
         users.push({user: user, clientId: client.id});
         console.log(`User ${user} is in the lobby`);
         // io.emit('return-users', users)
-        
         if(users.length % 2 === 0 && users.length > 0 ){
             console.dir('sufficient users found');
                 let inDice = dice.slice(0);
@@ -70,6 +70,12 @@ io.on('connection', (client) => {
             } else {
                 console.log(`the lobby has ${users.length} players`);
             }
+
+        })
+        client.on('game-over', (score, words, index) => {
+            console.log(score);
+            console.log(words);
+            console.log(index);
         })
         function  getClientsInRoom(room){
             let clients =[];

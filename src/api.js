@@ -21,8 +21,14 @@ function newRound(n){
     socket.on('new-round-made', (round, gameTimer) => n(round, gameTimer))
 }
 
+function endGame(n, score, words, index){
+    socket.emit('game-over', score, words, index)
+    socket.on('winner-chosen',(a) => n(a))
+}
+
 export {
     userJoin,
     newRound,
-    startGame
+    startGame,
+    endGame
 }
