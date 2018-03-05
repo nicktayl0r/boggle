@@ -23,7 +23,7 @@ function newRound(n){
 
 function endGame(n, score, words, index){
     socket.emit('game-over', score, words, index)
-    socket.on('winner-chosen',(a) => n(a))
+    socket.on('over-game',(a) => n(a))
 }
 
 export {

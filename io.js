@@ -11,11 +11,15 @@ class gameObject  {
         this.round = round;
         this.roundNo = roundNo;
         this.players = players;
+        this.gameScores = gameScores;
+        this.gameWords = gameWords
     }
 }
 let round;
 
 
+let gameScores = [];
+let gameWords = [];
 let dice = [
     ['R', 'I', 'F', 'O', 'B', 'X'],
     ['I', 'F', 'E', 'H', 'E', 'Y'],
@@ -73,9 +77,9 @@ io.on('connection', (client) => {
 
         })
         client.on('game-over', (score, words, index) => {
-            console.log(score);
-            console.log(words);
-            console.log(index);
+            collection[roundNo].gameScores[index] = score
+            collection[roundNo].gameWords[index] = words
+            io.to(`game ${roundNo}`).emit('over-game', collection[roundNo]);
         })
         function  getClientsInRoom(room){
             let clients =[];
