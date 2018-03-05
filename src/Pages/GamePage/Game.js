@@ -26,17 +26,20 @@ class Game extends React.Component {
     }
 
     handleGame =(obj) =>{
+        let players = [];
+        
+        players.push(obj['players'][0]['user'])
+        players.push(obj['players'][1]['user'])
         this.setState({
             isActive: true,
             round: obj['round'],
-            // players: obj['players'],
+            players: players,
             countdown: 240
         })
-        console.log(obj["round"])
+        
     }
 
     handleScore(w) {
-        console.log(w);
         switch(w.length) {
             case 3:
                 this.setState({pScore: this.state.pScore+1});
@@ -71,31 +74,12 @@ class Game extends React.Component {
             countdown: --c.countdown
         }));
     }
-    // newRound = () => {
-    //     socket.emit('make new round');
-    //     socket.on('new round made', gameboard => {this.setState({round: gameboard}) });
-    //     console.log(this.state.round)
-    //     // let inDice = dice.slice(0);
-    //     // let outDice =[];
-    //     // while(inDice.length > 0) {
-    //     //     let randIndex = Math.floor(inDice.length*Math.random());
-    //     //     outDice.push(inDice[randIndex]);
-    //     //     inDice.splice(randIndex, 1);
-    //     // }
-    //     // let gameboard = outDice.map(x => x[Math.floor(Math.random()*6)]);
-    //     // this.setState({round: gameboard, countdown: 30})
-    
-    // }
-
-    
     
     componentDidMount() {
-       
         console.log("component has mounted!")
     }
 
     wordValidator = (word) => {
-        
         
         // For a word two conditions must be met...
         let round = this.state.round
@@ -115,7 +99,6 @@ class Game extends React.Component {
         // next, we get the the number of occurances of the first tile in our board
 
         for(let i in round) {
-            console.log(round)
             if(round[i].toUpperCase() === word.slice(0, round[i].length).toUpperCase()){
                 boardIndices.push(i);
             }
@@ -130,12 +113,8 @@ class Game extends React.Component {
         }
         
         function crawlBoard(idx, thisWord){
-            console.dir(idx);
-            console.dir(thisWord);
             let nIdx = getNeighbors(idx);
             let nLtrIdx = [];
-
-            console.log(wordBin);
             if (thisWord[0].toUpperCase() === 'Q') {
                 wordBin.push(thisWord.substr(0, 2));
                 thisWord = thisWord.slice(2);
@@ -143,8 +122,6 @@ class Game extends React.Component {
                 wordBin.push(thisWord.split('').shift());
                 thisWord = thisWord.slice(1);
             }
-
-            console.log(thisWord)
             if (thisWord.length === 0) { 
                 return isInBoard = true };
             for(let n of nIdx){
@@ -236,9 +213,8 @@ class Game extends React.Component {
                         <h3 className='vaporwave'><em>“A serious and good philosophical work could be written consisting entirely of games of Boggle..."</em></h3>
                         <span>-Ludwig Wittgenstein</span>
                         <br/>
-                        <br/>
-                        <h4>Its a game of boggle between {this.state.players[1]} and {this.state.players[1]["user"]}</h4>
-                        <br/>
+                        <h3>Boggle Time!</h3>
+                        <h4> {this.state.players[0]} vs. {this.state.players[1]}</h4>
                         <br/>
                     <GameBoard
                             round={this.state.round}
@@ -256,7 +232,6 @@ class Game extends React.Component {
                     <div>
                         <div>
                             <h1 className="vaporwave">Users in Queue</h1>
-                            {this.state.players}
                         </div>
                         Please wait for another player...
                     </div>

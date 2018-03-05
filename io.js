@@ -37,57 +37,66 @@ let dice = [
 
 io.on('connection', (client) => {
     console.log(`Client ${client.id} is connected at ${new Date().toISOString()}.`);
-    
+    client.join('lobby')
     client.on('users-in-lobby', (user) => {
         users.push({user: user, clientId: client.id});
         console.log(`User ${user} is in the lobby`);
-        io.emit('return-users', users)
+        // io.emit('return-users', users)
         
         if(users.length % 2 === 0 && users.length > 0 ){
             console.dir('sufficient users found');
-            
                 let inDice = dice.slice(0);
                 let outDice =[];
                 let gameTimer = 240;
+                let newPlayers = [];
+
                 while(inDice.length > 0) {
                     let randIndex = Math.floor(inDice.length*Math.random());
                     outDice.push(inDice[randIndex]);
                     inDice.splice(randIndex, 1);
                 }
+
                 round = outDice.map(x => x[Math.floor(Math.random()*6)]);
-                let newPlayers = [];
                 roundNo++;
                 newPlayers.push(users.pop()); 
                 newPlayers.push(users.pop());
                 collection[roundNo] = new gameObject(round, roundNo, newPlayers);
                 console.log(JSON.stringify(collection[roundNo]));
-                io.emit('start-game', collection[roundNo]);
+
+                buildGame(collection[roundNo]["roundNo"])
+
+                io.to(`game ${roundNo}`).emit('start-game', collection[roundNo]);
             
             } else {
-                console.log(`the lobby has an ${users.length} players`);
+                console.log(`the lobby has ${users.length} players`);
             }
         })
+        function  getClientsInRoom(room){
+            let clients =[];
+            for(let c in io.sockets.adapter.rooms[room].sockets)
+                clients.push(io.sockets.connected[c]);
+            return clients;
+        }
+        
+        function buildGame(gameData){
+            let players = getClientsInRoom('lobby')
+            players[0].leave('lobby');
+            players[1].leave('lobby');
+            players[0].join(`game ${gameData}`);
+            players[1].join(`game ${gameData}`);
+            console.log(io.sockets.adapter.rooms);
+
+        }
     })
     //at the end of a round, show who has won
     
-    
     // when timer is up tally scores and notify the players of who has won
-    
     
 io.on('disconnection', (client)=> {
     console.log(`client ${client} has disconnected, ${users} are still connected `)
 });
 
+
     //handle roundend
-
-
-//should pull all clients to a playerlist array
-
-
-//1 add clients to a game
-    // if user is not in some array of users
-    // if players in game is less than the playerTarget
-
-
 
   module.exports = io;
