@@ -3,40 +3,21 @@ import GameBoard from '../../Components/GameBoard/GameBoard'
 import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed'
 import './Game.css';
 import words from 'an-array-of-english-words';
-import {userJoin} from './../../api';
+import {userJoin, newRound} from './../../api';
 
-
-let dice = [
-    ['R', 'I', 'F', 'O', 'B', 'X'],
-    ['I', 'F', 'E', 'H', 'E', 'Y'],
-    ['D', 'E', 'N', 'O', 'W', 'S'],
-    ['U', 'T', 'O', 'K', 'N', 'D'],
-    ['H', 'M', 'S', 'R', 'A', 'O'],
-    ['L', 'U', 'P', 'E', 'T', 'S'],
-    ['A', 'C', 'I', 'T', 'O', 'A'],
-    ['Y', 'L', 'G', 'K', 'U', 'E'],
-    ['Qu', 'B', 'M', 'J', 'O', 'A'],
-    ['E', 'H', 'I', 'S', 'P', 'N'],
-    ['V', 'E', 'T', 'I', 'G', 'N'],
-    ['B', 'A', 'L', 'I', 'Y', 'T'],
-    ['E', 'Z', 'A', 'V', 'N', 'D'],
-    ['R', 'A', 'L', 'E', 'S', 'C'],
-    ['U', 'W', 'I', 'L', 'R', 'G'],
-    ['P', 'A', 'C', 'E', 'M', 'D']
-];
 
 class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            host: '',
+            isActive: false,
             roundCount: 0,
             round: [],
-            countdown: 180,
+            countdown: 0,
             pScore: 0,
-            pWords: []
-        }
-        
+            pWords: [],
+            players: ['dean', 'jimmy']
+        }   
     }
 
 
@@ -63,35 +44,40 @@ class Game extends React.Component {
         }
     }
 
+    handleRound = (m, l) => {
+        this.setState({round: m, countdown: l})
+    }
+
     handleTick = () => {
         this.setState((c) => ({
             countdown: --c.countdown
         }));
     }
-    newRound = () => {
-        let inDice = dice.slice(0);
-        let outDice =[];
-        while(inDice.length > 0) {
-            let randIndex = Math.floor(inDice.length*Math.random());
-            console.log(inDice)
-            outDice.push(inDice[randIndex]);
-            inDice.splice(randIndex, 1);
-        }
-        let gameboard = outDice.map(x => x[Math.floor(Math.random()*6)]);
-        this.setState({round: gameboard, countdown: 30})
+    // newRound = () => {
+    //     socket.emit('make new round');
+    //     socket.on('new round made', gameboard => {this.setState({round: gameboard}) });
+    //     console.log(this.state.round)
+    //     // let inDice = dice.slice(0);
+    //     // let outDice =[];
+    //     // while(inDice.length > 0) {
+    //     //     let randIndex = Math.floor(inDice.length*Math.random());
+    //     //     outDice.push(inDice[randIndex]);
+    //     //     inDice.splice(randIndex, 1);
+    //     // }
+    //     // let gameboard = outDice.map(x => x[Math.floor(Math.random()*6)]);
+    //     // this.setState({round: gameboard, countdown: 30})
     
-    }
+    // }
     
-    componentDidMount (){ 
-        
-        this.newRound();
+    componentDidMount (){
+        newRound(() => this.handleRound);
+        userJoin(this.props.user);
         console.log("component has mounted!")
-        userJoin(this.state.host);
-
+        console.log(this.state.round)
     }
 
     wordValidator = (word) => {
-        console.log(word)
+        
         
         // For a word two conditions must be met...
         let round = this.state.round
@@ -114,8 +100,6 @@ class Game extends React.Component {
             console.log(round)
             if(round[i].toUpperCase() === word.slice(0, round[i].length).toUpperCase()){
                 boardIndices.push(i);
-
-
             }
         }
 
@@ -134,7 +118,7 @@ class Game extends React.Component {
             let nLtrIdx = [];
 
             console.log(wordBin);
-            if (thisWord[0].toUpperCase() == 'Q') {
+            if (thisWord[0].toUpperCase() === 'Q') {
                 wordBin.push(thisWord.substr(0, 2));
                 thisWord = thisWord.slice(2);
             } else {
@@ -233,16 +217,19 @@ class Game extends React.Component {
                 <span>-Ludwig Wittgenstein</span>
                 <br/>
                 <br/>
+                <h4>Its a game of boggle between {this.state.players[0]} and {this.state.players[1]}</h4>
+                <br/>
+                <br/>
                 <GameBoard 
                     round={this.state.round}
-                    newRound={this.newRound}
+                    newRound={() => newRound(this.handleRound)}
                     wordValidator={this.wordValidator}
                     countdown={this.state.countdown}
                     handleTick={this.handleTick}
                     pScore={this.state.pScore}
                     handleScore={this.state.score}
                 />
-                <PlayerFeed />
+                
             </div>
         )
     }
