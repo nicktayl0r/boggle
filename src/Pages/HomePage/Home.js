@@ -19,8 +19,8 @@ const Home = (props) => {
             handleLogout={props.handleLogout}
         />
         <div className="BoggleMenu">
-            <div><Link to='/game'>Create Game</Link></div>
-            <div>Join Game ~~TBD </div>
+            <div><Link to='/game'>Play Boggle</Link></div>
+            <div>Thesaurus</div>
             <div><Link to="/scores">High Scores</Link></div>
             <div onClick={props.handleOpenModal}>How to Play</div>
             <Modal

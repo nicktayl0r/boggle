@@ -3,7 +3,7 @@ import GameBoard from '../../Components/GameBoard/GameBoard'
 import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed'
 import './Game.css';
 import words from 'an-array-of-english-words';
-import {userJoin, newRound} from './../../api';
+import {userJoin, newRound, startGame} from './../../api';
 
 
 class Game extends React.Component {
@@ -11,15 +11,29 @@ class Game extends React.Component {
         super(props);
         this.state = {
             isActive: false,
-            roundCount: 0,
             round: [],
             countdown: 0,
             pScore: 0,
             pWords: [],
-            players: ['dean', 'jimmy']
-        }   
+            players: ['dean', 'jimmy'],
+            users: [props.user.name],
+
+        }
+       startGame(this.handleGame);
+       userJoin(this.state.users[0], this.getUsers);
+       
+        
     }
 
+    handleGame =(obj) =>{
+        this.setState({
+            isActive: true,
+            round: obj['round'],
+            // players: obj['players'],
+            countdown: 240
+        })
+        console.log(obj["round"])
+    }
 
     handleScore(w) {
         console.log(w);
@@ -44,8 +58,12 @@ class Game extends React.Component {
         }
     }
 
+    getUsers = (users) => {
+        this.setState({players: JSON.stringify(users)})
+    }
+
     handleRound = (m, l) => {
-        this.setState({round: m, countdown: l})
+        this.setState({countdown: 240})
     }
 
     handleTick = () => {
@@ -68,12 +86,12 @@ class Game extends React.Component {
     //     // this.setState({round: gameboard, countdown: 30})
     
     // }
+
     
-    componentDidMount (){
-        newRound(() => this.handleRound);
-        userJoin(this.props.user);
+    
+    componentDidMount() {
+       
         console.log("component has mounted!")
-        console.log(this.state.round)
     }
 
     wordValidator = (word) => {
@@ -211,27 +229,40 @@ class Game extends React.Component {
     }
 
     render(){
-        return(
-            <div>
-                <h3 className='vaporwave'><em>“A serious and good philosophical work could be written consisting entirely of games of Boggle..."</em></h3>
-                <span>-Ludwig Wittgenstein</span>
-                <br/>
-                <br/>
-                <h4>Its a game of boggle between {this.state.players[0]} and {this.state.players[1]}</h4>
-                <br/>
-                <br/>
-                <GameBoard 
-                    round={this.state.round}
-                    newRound={() => newRound(this.handleRound)}
-                    wordValidator={this.wordValidator}
-                    countdown={this.state.countdown}
-                    handleTick={this.handleTick}
-                    pScore={this.state.pScore}
-                    handleScore={this.state.score}
-                />
-                
-            </div>
-        )
+        {
+            if(this.state.isActive){
+                return(
+                    <div>
+                        <h3 className='vaporwave'><em>“A serious and good philosophical work could be written consisting entirely of games of Boggle..."</em></h3>
+                        <span>-Ludwig Wittgenstein</span>
+                        <br/>
+                        <br/>
+                        <h4>Its a game of boggle between {this.state.players[1]} and {this.state.players[1]["user"]}</h4>
+                        <br/>
+                        <br/>
+                    <GameBoard
+                            round={this.state.round}
+                            newRound={() => newRound(this.handleRound)}
+                            wordValidator={this.wordValidator}
+                            countdown={this.state.countdown}
+                            handleTick={this.handleTick}
+                            pScore={this.state.pScore}
+                            handleScore={this.state.score}
+                        />
+                    </div>
+                )
+            } else {
+                return(
+                    <div>
+                        <div>
+                            <h1 className="vaporwave">Users in Queue</h1>
+                            {this.state.players}
+                        </div>
+                        Please wait for another player...
+                    </div>
+                )
+            }
+        }
     }
 }
 

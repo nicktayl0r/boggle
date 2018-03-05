@@ -6,24 +6,23 @@ const socket = openSocket('http://localhost:3001');
 //     socket.emit('subscribeToTimer', 100);
 // }
 
-let gameRound;
 
-function userJoin(user){
-    socket.emit('user in lobby', user);
-    socket.on('users in lobby', users => {return users});   
+function startGame(n){
+    socket.on('start-game', (game) => n(game))
+}
+
+function userJoin(user, n){
+    socket.on('return-users', (users) => n(users));   
+    socket.emit('users-in-lobby', user);
 }
    
 function newRound(n){
-    console.log('new round requested')
     socket.emit('make new round');
     socket.on('new-round-made', (round, gameTimer) => n(round, gameTimer))
 }
 
-    
-
-
 export {
-    // subscribeToTimer, 
     userJoin,
-    newRound
+    newRound,
+    startGame
 }

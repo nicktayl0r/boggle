@@ -1,5 +1,7 @@
 .vaporwave { 
-    text-shadow:-.07rem -.07rem 0 #6BFFFF, .0625rem .0625rem 0 #FF819E;
+    text-shadow:-.07rem .07rem 0 #6BFFFF, .0625rem .0625rem 0 #FF819E;
+    color: white;
+    background-color:black;
     
 }
 

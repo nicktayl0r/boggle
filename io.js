@@ -1,21 +1,20 @@
 const io = require('socket.io')();
-
 // require client side game logic, user model, and the game model
 let User = require('./models/user');
 
-let roundNo = 0
-let users = ['oh hello'];
-let collection =[];
+let roundNo = -1
+let users = [];
+let collection = [];
 
 class gameObject  {
-    constructor(game, roundNo, players){
-        this.game = [];
+    constructor(round, roundNo, players){
+        this.round = round;
         this.roundNo = roundNo;
-        this.players = [];
+        this.players = players;
     }
 }
+let round;
 
-let round = [];
 
 let dice = [
     ['R', 'I', 'F', 'O', 'B', 'X'],
@@ -36,75 +35,49 @@ let dice = [
     ['P', 'A', 'C', 'E', 'M', 'D']
 ];
 
-
-
 io.on('connection', (client) => {
     console.log(`Client ${client.id} is connected at ${new Date().toISOString()}.`);
     
-    client.on('user in lobby', (user) => {
-        !users.includes(user) ? users.push(user): console.log(`user ${user} is already in the lobby`);
+    client.on('users-in-lobby', (user) => {
+        users.push({user: user, clientId: client.id});
         console.log(`User ${user} is in the lobby`);
-        console.log(users)
-        client.emit('users in lobby', users)
+        io.emit('return-users', users)
+        
+        if(users.length % 2 === 0 && users.length > 0 ){
+            console.dir('sufficient users found');
+            
+                let inDice = dice.slice(0);
+                let outDice =[];
+                let gameTimer = 240;
+                while(inDice.length > 0) {
+                    let randIndex = Math.floor(inDice.length*Math.random());
+                    outDice.push(inDice[randIndex]);
+                    inDice.splice(randIndex, 1);
+                }
+                round = outDice.map(x => x[Math.floor(Math.random()*6)]);
+                let newPlayers = [];
+                roundNo++;
+                newPlayers.push(users.pop()); 
+                newPlayers.push(users.pop());
+                collection[roundNo] = new gameObject(round, roundNo, newPlayers);
+                console.log(JSON.stringify(collection[roundNo]));
+                io.emit('start-game', collection[roundNo]);
+            
+            } else {
+                console.log(`the lobby has an ${users.length} players`);
+            }
+        })
     })
-
-    client.on('make new round', () => {
-        console.log('making a round on the server')
-        let inDice = dice.slice(0);
-        let outDice =[];
-        let gameTimer = 240;
-        while(inDice.length > 0) {
-            let randIndex = Math.floor(inDice.length*Math.random());
-            outDice.push(inDice[randIndex]);
-            inDice.splice(randIndex, 1);
-        }
-        round = outDice.map(x => x[Math.floor(Math.random()*6)]);
-        client.emit('new-round-made', round, gameTimer)
-
-
-        if(users.length % 2 === 0 ){
-            roundNo++;
-            let newPlayers = []
-            newPlayers.push(users.pop()); 
-            newPlayers.push(users.pop());
-            collection[roundNo] = new gameObject(round, roundNo, newPlayers);
-            console.log(JSON.stringify(collection));
-
-            // client.emit('start game', [gameObject])
-        } else {
-            console.log(`the lobby has an odd number of players`);
-            console.log(users)
-        }
-    })
-
-
-    // add users to lobby, when the lobby has 2 parties, begin a game
-    // 5 seconds before game start, create game board and timer here
+    //at the end of a round, show who has won
+    
     
     // when timer is up tally scores and notify the players of who has won
     
     
-});
-
-
 io.on('disconnection', (client)=> {
     console.log(`client ${client} has disconnected, ${users} are still connected `)
-
 });
 
-
-
-    // client.on('subscribeToTimer', (interval) => {
-    //     // console.log('client is subscribing to timer with interval', interval);
-    //     setInterval(() => {
-    //         client.emit('timer', new Date());
-    //     }, interval)
-    // });
-
-
-    //handle roundstart
-    
-    
     //handle roundend
 
 
