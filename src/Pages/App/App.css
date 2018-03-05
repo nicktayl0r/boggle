@@ -11,9 +11,9 @@
 }
 
 .BoggleMenu > div {
-    background-color: grey;
     height: 75px;
     border: 1px solid white;
+    text-decoration: none;
 }
 
 

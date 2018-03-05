@@ -1,0 +1,22 @@
+.Home {
+    background-color: black;
+    color: white;
+    border-radius: 15px;
+    text-decoration: none;
+}
+
+a:first {
+    color: black;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    transition-duration: 1s;
+}
+
+div > a:hover {
+    font-size: 20px;
+    transition-duration: .5s;
+}
