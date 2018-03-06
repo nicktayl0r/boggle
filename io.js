@@ -1,5 +1,4 @@
 // const io = socketIO(server);
-
 const io = require('socket.io')();
 // require client side game logic, user model, and the game model
 
@@ -43,12 +42,12 @@ let dice = [
     ['P', 'A', 'C', 'E', 'M', 'D']
 ];
 
-io.on('connection', (client) => {
-    console.log(`Client ${client.id} is connected at ${new Date().toISOString()}.`);
+io.on('connection', (socket) => {
+    console.log(`Client ${socket.id} is connected at ${new Date().toISOString()}.`);
     console.log(users);
-    client.join('lobby')
-    client.on('users-in-lobby', (user) => {
-        users.push({user: user, clientId: client.id});
+    socket.join('lobby')
+    socket.on('return-users', (user) => {
+        users.push({user: user, clientId: socket.id});
         console.log(`User ${user} is in the lobby`);
         // io.emit('return-users', users)
         if(users.length % 2 === 0 && users.length > 0 ){
@@ -80,7 +79,7 @@ io.on('connection', (client) => {
             }
 
         })
-        client.on('game-over', (score, words, index) => {
+        socket.on('game-over', (score, words, index) => {
             collection[roundNo].gameScores[index] = score
             collection[roundNo].gameWords[index] = words
             io.to(`game ${roundNo}`).emit('over-game', collection[roundNo]);

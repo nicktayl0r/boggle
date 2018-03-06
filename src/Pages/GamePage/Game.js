@@ -6,6 +6,7 @@ import GameOver from './../Modals/GameOver';
 import words from 'an-array-of-english-words';
 import './Game.css';
 import {Link} from 'react-router-dom';
+import io from 'socket.io-client';
 import {userJoin, newRound, startGame, endGame} from './../../api';
 
 class Game extends React.Component {
