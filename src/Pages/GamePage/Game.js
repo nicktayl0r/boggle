@@ -1,10 +1,12 @@
 import React from 'react';
-import GameBoard from '../../Components/GameBoard/GameBoard'
-import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed'
-import './Game.css';
+import GameBoard from '../../Components/GameBoard/GameBoard';
+import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed';
+import Modal from 'react-modal';
+import GameOver from './../Modals/GameOver';
 import words from 'an-array-of-english-words';
 import {userJoin, newRound, startGame, endGame} from './../../api';
-
+import './Game.css';
+import {Link} from 'react-router-dom';
 
 class Game extends React.Component {
     constructor(props) {
@@ -17,16 +19,32 @@ class Game extends React.Component {
             pWords: [],
             players: [],
             users: [props.user.name],
+            showModal: false,
+            winState: 0
         }
-       startGame(this.handleGame);
-       userJoin(this.state.users[0], this.getUsers);
-       
+
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+
+        startGame(this.handleGame);
+        userJoin(this.state.users[0], this.getUsers);
+    }
+
+    handleOpenModal() {
+        this.setState({ showModal: true });
+    }
+    
+    handleCloseModal() {
+        this.setState({ showModal: false });
     }
 
     handleGameOver = (c) => {
-        if(c === 0){
-            alert('oh boy, looks like the game is over')
-        }
+        
+            if(!c.gameScores.includes(null) &&  c !== 0){
+                console.log(c)
+                this.setState({ winState: JSON.stringify(c)})
+            }
+        
     }
 
     handleGame =(obj) =>{
@@ -37,9 +55,8 @@ class Game extends React.Component {
             isActive: true,
             round: obj['round'],
             players: players,
-            countdown: 20
+            countdown: 20,
         })
-        
     }
 
     handleScore(w) {
@@ -80,12 +97,12 @@ class Game extends React.Component {
         let pIndex = this.state.players.indexOf(this.state.users[0]);
         if(this.state.countdown === 0){
             endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
+            this.handleOpenModal();
         }
     }
     
     componentDidMount() {
         console.log("component has mounted!")
-        
     }
 
     wordValidator = (word) => {
@@ -234,6 +251,17 @@ class Game extends React.Component {
                             pScore={this.state.pScore}
                             handleScore={this.state.score}
                         />
+                        <Modal
+                            isOpen={this.state.showModal}
+                            contentLabel="Game Over Message"
+                            >
+                            <button onClick={this.handleCloseModal}>Close</button>
+                            <br/>
+                            <GameOver winState={this.state.winState}
+                                      user={this.state.users}
+                                      players={this.state.players}
+                            />
+                        </Modal>
                     </div>
                 )
             } else {

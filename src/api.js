@@ -12,8 +12,8 @@ function startGame(n){
 }
 
 function userJoin(user, n){
-    socket.on('return-users', (users) => n(users));   
-    socket.emit('users-in-lobby', user);
+    socket.on('users-return', (users) => n(users));   
+    socket.emit('return-users', user);
 }
    
 function newRound(n){

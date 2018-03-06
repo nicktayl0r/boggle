@@ -43,32 +43,19 @@ io.on('connection', (client) => {
     console.log(`Client ${client.id} is connected at ${new Date().toISOString()}.`);
     console.log(users);
     client.join('lobby')
-    client.on('users-in-lobby', (user) => {
+    client.on('return-users', (user) => {
         users.push({user: user, clientId: client.id});
         console.log(`User ${user} is in the lobby`);
-        // io.emit('return-users', users)
         if(users.length % 2 === 0 && users.length > 0 ){
             console.dir('sufficient users found');
-                let inDice = dice.slice(0);
-                let outDice =[];
-                let gameTimer = 240;
                 let newPlayers = [];
-
-                while(inDice.length > 0) {
-                    let randIndex = Math.floor(inDice.length*Math.random());
-                    outDice.push(inDice[randIndex]);
-                    inDice.splice(randIndex, 1);
-                }
-
-                round = outDice.map(x => x[Math.floor(Math.random()*6)]);
-                roundNo++;
+                roundMaker();
                 newPlayers.push(users.pop()); 
                 newPlayers.push(users.pop());
                 collection[roundNo] = new gameObject(round, roundNo, newPlayers);
-                console.log(JSON.stringify(collection[roundNo]));
 
                 buildGame(collection[roundNo]["roundNo"])
-
+                
                 io.to(`game ${roundNo}`).emit('start-game', collection[roundNo]);
             
             } else {
@@ -76,10 +63,13 @@ io.on('connection', (client) => {
             }
 
         })
+    
         client.on('game-over', (score, words, index) => {
             collection[roundNo].gameScores[index] = score
             collection[roundNo].gameWords[index] = words
-            io.to(`game ${roundNo}`).emit('over-game', collection[roundNo]);
+            if (collection[roundNo].gameScores.length > 1 && !collection[roundNo].gameScores.includes(null)){
+                io.to(`game ${roundNo}`).emit('over-game', collection[roundNo]);
+            }
         })
         function  getClientsInRoom(room){
             let clients =[];
@@ -94,19 +84,28 @@ io.on('connection', (client) => {
             players[1].leave('lobby');
             players[0].join(`game ${gameData}`);
             players[1].join(`game ${gameData}`);
-            console.log(io.sockets.adapter.rooms);
 
         }
+        function roundMaker(){
+            let inDice = dice.slice(0);
+            let outDice = [];
+            let gameTimer = 240;
+            
+
+            while(inDice.length > 0) {
+                let randIndex = Math.floor(inDice.length*Math.random());
+                outDice.push(inDice[randIndex]);
+                inDice.splice(randIndex, 1);
+            }
+
+            round = outDice.map(x => x[Math.floor(Math.random()*6)]);
+            roundNo++;
+        }
     })
-    //at the end of a round, show who has won
-    
-    // when timer is up tally scores and notify the players of who has won
     
 io.on('disconnection', (client)=> {
     console.log(`client ${client} has disconnected, ${users} are still connected `)
 });
 
 
-    //handle roundend
-
-  module.exports = io;
+module.exports = io;

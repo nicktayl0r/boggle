@@ -14,9 +14,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showModal: false,
-            fizz: "buzz",
-            timestamp: 'no timestamp yet'
+            showModal: false
         }
 
         this.handleOpenModal = this.handleOpenModal.bind(this);

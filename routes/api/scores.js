@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../../models/score');
+var scoresCtrl = require('../../controllers/scores');
 
 
-router.post();
-
-
+router.get('/', scoresCtrl.index);
+router.post('/game', scoresCtrl.addScore)
 
 
 
