@@ -4,7 +4,6 @@ import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed';
 import Modal from 'react-modal';
 import GameOver from './../Modals/GameOver';
 import words from 'an-array-of-english-words';
-import {userJoin, newRound, startGame, endGame} from './../../api';
 import './Game.css';
 import {Link} from 'react-router-dom';
 
@@ -26,9 +25,27 @@ class Game extends React.Component {
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
 
-        startGame(this.handleGame);
-        userJoin(this.state.users[0], this.getUsers);
+
+        
     }
+            startGame = (n) => {
+                this.socket.on('start-game', (game) => n(game))
+            }
+            
+            userJoin = (user, n) => {
+                this.socket.on('users-return', (users) => n(users));   
+                this.socket.emit('return-users', user);
+            }
+               
+            newRound = (n) => {
+                this.socket.emit('make new round');
+                this.socket.on('new-round-made', (round, gameTimer) => n(round, gameTimer))
+            }
+            
+            endGame = (n, score, words, index) => {
+                this.socket.emit('game-over', score, words, index)
+                this.socket.on('over-game',(a) => n(a))
+            }
 
     handleOpenModal() {
         this.setState({ showModal: true });
@@ -58,6 +75,8 @@ class Game extends React.Component {
             countdown: 20,
         })
     }
+
+    
 
     handleScore(w) {
         switch(w.length) {
@@ -96,13 +115,18 @@ class Game extends React.Component {
 
         let pIndex = this.state.players.indexOf(this.state.users[0]);
         if(this.state.countdown === 0){
-            endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
+            this.endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
             this.handleOpenModal();
         }
     }
     
     componentDidMount() {
-        console.log("component has mounted!")
+        console.log("component has mounted!");
+        this.socket = window.io.connect({ query: `user=${JSON.stringify(this.state.user)}` });
+        this.startGame(this.handleGame);
+        this.userJoin(this.state.users[0], this.getUsers);
+
+        
     }
 
     wordValidator = (word) => {
@@ -244,7 +268,7 @@ class Game extends React.Component {
                         <br/>
                     <GameBoard
                             round={this.state.round}
-                            newRound={() => newRound(this.handleRound)}
+                            newRound={() => this.newRound(this.handleRound)}
                             wordValidator={this.wordValidator}
                             countdown={this.state.countdown}
                             handleTick={this.handleTick}
