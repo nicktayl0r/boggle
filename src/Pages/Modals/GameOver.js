@@ -9,11 +9,6 @@ const GameOver = (props) => {
     let userIndex = players.indexOf(user[0]);
 
     let otherIndex = userIndex === 1 ? 0: 1;
-    console.log(gameOutcome)
-    console.log(user);
-    console.log(userIndex);
-    console.log(players);
-    
     
     {
         if(gameOutcome !== 0 && gameOutcome.gameScores[0] === gameOutcome.gameScores[1] ){
@@ -23,22 +18,23 @@ const GameOver = (props) => {
                 <p> Let's settle this with a game of Boggle.</p>
                 <br/>
                 <table>
-                    <tr>
-                                <th>Player</th> |
-                                <th>Score</th> |
+                    <tbody>
+                            <tr>
+                                <th>Player</th>
+                                <th>Score</th>
                                 <th>Words</th>
                             </tr>
-                    <tr>
+                            <tr>
                                 <td>{players[0]}</td>
                                 <td>{gameOutcome.gameScores[0]}</td>
-                                <td>{gameOutcome.gameWords[0]}</td>
+                                <td>{gameOutcome.gameWords.length>0?gameOutcome.gameWords[0].join(', '):'no words!'}</td>
                             </tr>
                             <tr>
                                 <td>{players[1]}</td>
                                 <td>{gameOutcome.gameScores[1]}</td>
-                                <td>{gameOutcome.gameWords[1]}</td>
+                                <td>{gameOutcome.gameWords.length>0?gameOutcome.gameWords[1].join(', '):' no words!'}</td>
                             </tr>
-                    
+                    </tbody>
                 </table>
                 
                 <Link to="/scores"><button >Visit Leaderboard</button></Link>
@@ -51,23 +47,23 @@ const GameOver = (props) => {
                     <p> You lost to {players[otherIndex]}! How about another round?</p>
                     <br/>
                     <table>
-                        
+                        <tbody>
                             <tr>
-                                <th>Player</th> |
-                                <th>Score</th> |
+                                <th>Player</th>
+                                <th>Score</th>
                                 <th>Words</th>
                             </tr>
                             <tr>
                                 <td>{players[0]}</td>
                                 <td>{gameOutcome.gameScores[0]}</td>
-                                <td>{gameOutcome.gameWords[0]}</td>
+                                <td>{gameOutcome.gameWords.length>0?gameOutcome.gameWords[0].join(', '):'no words!'}</td>
                             </tr>
                             <tr>
                                 <td>{players[1]}</td>
                                 <td>{gameOutcome.gameScores[1]}</td>
-                                <td>{gameOutcome.gameWords[1]}</td>
+                                <td>{gameOutcome.gameWords.length>0?gameOutcome.gameWords[1].join(', '):'no words!'}</td>
                             </tr>
-                        
+                        </tbody>
                     </table>
                     
                     <Link to="/scores"><button >Visit Leaderboard</button></Link>
@@ -81,23 +77,23 @@ const GameOver = (props) => {
                     <p>You destroyed {players[otherIndex]}! Why not relive the glory?</p>
                     <br/>
                     <table>
-                        
+                        <tbody>
                             <tr>
-                                <th>Player</th> |
-                                <th>Score</th> |
+                                <th>Player</th>
+                                <th>Score</th>
                                 <th>Words</th>
                             </tr>
-                        <tr>
+                            <tr>
                                 <td>{players[0]}</td>
                                 <td>{gameOutcome.gameScores[0]}</td>
-                                <td>{gameOutcome.gameWords[0]}</td>
+                                <td>{gameOutcome.gameWords.length>0?gameOutcome.gameWords[0].join(', '):'no words!'}</td>
                             </tr>
                             <tr>
                                 <td>{players[1]}</td>
                                 <td>{gameOutcome.gameScores[1]}</td>
-                                <td>{gameOutcome.gameWords[1].join(', ')}</td>
+                                <td>{gameOutcome.gameWords.length >0?gameOutcome.gameWords[1].join(', '):'no words!'}</td>
                             </tr>
-                        
+                        </tbody>
                     </table>
                     
                     <Link to="/scores"><button >Visit Leaderboard</button></Link>

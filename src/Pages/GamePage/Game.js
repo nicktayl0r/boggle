@@ -40,7 +40,6 @@ class Game extends React.Component {
     
     handleGameOver = (c) => {
         if(!c.gameScores.includes(null) &&  c !== 0){
-            console.log(c)
             this.setState({ winState: JSON.stringify(c)})
         }   
     }
