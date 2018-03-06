@@ -1,7 +1,6 @@
-var User = require('../models/user');
+var User = require('./../models/user');
 var jwt = require('jsonwebtoken');
 var SECRET = process.env.SECRET;
-
 
 function signup(req, res) {
   var user = new User(req.body);
