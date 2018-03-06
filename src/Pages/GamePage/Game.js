@@ -6,6 +6,7 @@ import GameOver from './../Modals/GameOver';
 import words from 'an-array-of-english-words';
 import './Game.css';
 import {Link} from 'react-router-dom';
+import {userJoin, newRound, startGame, endGame} from './../../api';
 
 class Game extends React.Component {
     constructor(props) {
@@ -21,32 +22,13 @@ class Game extends React.Component {
             showModal: false,
             winState: 0
         }
+        startGame(this.handleGame);
+        userJoin(this.state.users[0], this.getUsers);
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
-
-
-        
     }
-            startGame = (n) => {
-                this.socket.on('start-game', (game) => n(game))
-            }
-            
-            userJoin = (user, n) => {
-                this.socket.on('users-return', (users) => n(users));   
-                this.socket.emit('return-users', user);
-            }
-               
-            newRound = (n) => {
-                this.socket.emit('make new round');
-                this.socket.on('new-round-made', (round, gameTimer) => n(round, gameTimer))
-            }
-            
-            endGame = (n, score, words, index) => {
-                this.socket.emit('game-over', score, words, index)
-                this.socket.on('over-game',(a) => n(a))
-            }
-
+    
     handleOpenModal() {
         this.setState({ showModal: true });
     }
@@ -54,17 +36,15 @@ class Game extends React.Component {
     handleCloseModal() {
         this.setState({ showModal: false });
     }
-
+    
     handleGameOver = (c) => {
-        
-            if(!c.gameScores.includes(null) &&  c !== 0){
-                console.log(c)
-                this.setState({ winState: JSON.stringify(c)})
-            }
-        
+        if(!c.gameScores.includes(null) &&  c !== 0){
+            console.log(c)
+            this.setState({ winState: JSON.stringify(c)})
+        }   
     }
 
-    handleGame =(obj) =>{
+    handleGame = (obj) =>{
         let players = [];
         players.push(obj['players'][0]['user'])
         players.push(obj['players'][1]['user'])
@@ -74,9 +54,7 @@ class Game extends React.Component {
             players: players,
             countdown: 20,
         })
-    }
-
-    
+    }    
 
     handleScore(w) {
         switch(w.length) {
@@ -112,21 +90,15 @@ class Game extends React.Component {
         this.setState((c) => ({
             countdown: --c.countdown
         }));
-
         let pIndex = this.state.players.indexOf(this.state.users[0]);
         if(this.state.countdown === 0){
-            this.endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
+            endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
             this.handleOpenModal();
         }
     }
     
     componentDidMount() {
         console.log("component has mounted!");
-        this.socket = window.io.connect({ query: `user=${JSON.stringify(this.state.user)}` });
-        this.startGame(this.handleGame);
-        this.userJoin(this.state.users[0], this.getUsers);
-
-        
     }
 
     wordValidator = (word) => {

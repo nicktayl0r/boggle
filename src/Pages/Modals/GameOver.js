@@ -7,6 +7,8 @@ const GameOver = (props) => {
     let user = props.user;
     let gameOutcome = JSON.parse(props.winState);
     let userIndex = players.indexOf(user[0]);
+
+    let otherIndex = userIndex === 1 ? 0: 1;
     console.log(gameOutcome)
     console.log(user);
     console.log(userIndex);
@@ -46,7 +48,7 @@ const GameOver = (props) => {
             return(
                 <div className="Rules">
                     <h1>Mediocre!</h1>
-                    <p> You lost to x! How about another round?</p>
+                    <p> You lost to {players[otherIndex]}! How about another round?</p>
                     <br/>
                     <table>
                         
@@ -76,7 +78,7 @@ const GameOver = (props) => {
               
                 <div className="Rules">
                     <h1>Well Done</h1>
-                    <p>You destroyed x! Why not relive the glory?</p>
+                    <p>You destroyed {players[otherIndex]}! Why not relive the glory?</p>
                     <br/>
                     <table>
                         
