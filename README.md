@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 # Boggle? Boggle!
 Dare ye test your wits in a bout of boggle? War with words! Vanquish with vocabulary! Destroy with diction! 
 
-[pic](https://i.imgur.com/cgBBsIc.png)
+![pic](https://i.imgur.com/cgBBsIc.png boggle)
 
 ## History
 
@@ -12,8 +12,6 @@ Dare ye test your wits in a bout of boggle? War with words! Vanquish with vocabu
 ## How to Play
 
 GIT GUD OR GIT OUT
-
-_under construction_
 
 ## Future Features
 * Allow multiple games to persist and be played simultaneously.
