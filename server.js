@@ -17,7 +17,7 @@ var app = express();
 app.use(logger('dev'));
 
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use('/*', express.static(path.join(__dirname, '/build')));
 
 app.use(bodyParser.json());
 
