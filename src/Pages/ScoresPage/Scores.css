@@ -1,0 +1,10 @@
+
+
+.Scores > div:first-child {
+    background-color: black;
+    color: white;
+}
+.Scores > a{
+    
+    color: black;
+}
