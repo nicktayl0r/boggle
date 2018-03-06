@@ -14,7 +14,7 @@ const Home = (props) => {
                 <div>🅶</div>
                 <div>🅶</div>
                 <div>🅻</div>
-                <div>🅴</div>
+                <div>🅴</div>   
             </div>
         <div className="BoggleMenu">
             <div className="Home">

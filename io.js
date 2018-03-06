@@ -1,6 +1,8 @@
 const io = require('socket.io')();
+
+
 // require client side game logic, user model, and the game model
-let User = require('./models/user');
+
 
 let roundNo = -1
 let users = [];
@@ -49,7 +51,21 @@ io.on('connection', (client) => {
         if(users.length % 2 === 0 && users.length > 0 ){
             console.dir('sufficient users found');
                 let newPlayers = [];
-                roundMaker();
+                
+                let inDice = dice.slice(0);
+                let outDice = [];
+                let gameTimer = 240;
+                
+    
+                while(inDice.length > 0) {
+                    let randIndex = Math.floor(inDice.length*Math.random());
+                    outDice.push(inDice[randIndex]);
+                    inDice.splice(randIndex, 1);
+                }
+    
+                round = outDice.map(x => x[Math.floor(Math.random()*6)]);
+                roundNo++;
+
                 newPlayers.push(users.pop()); 
                 newPlayers.push(users.pop());
                 collection[roundNo] = new gameObject(round, roundNo, newPlayers);
@@ -86,21 +102,8 @@ io.on('connection', (client) => {
             players[1].join(`game ${gameData}`);
 
         }
-        function roundMaker(){
-            let inDice = dice.slice(0);
-            let outDice = [];
-            let gameTimer = 240;
-            
-
-            while(inDice.length > 0) {
-                let randIndex = Math.floor(inDice.length*Math.random());
-                outDice.push(inDice[randIndex]);
-                inDice.splice(randIndex, 1);
-            }
-
-            round = outDice.map(x => x[Math.floor(Math.random()*6)]);
-            roundNo++;
-        }
+        
+      
     })
     
 io.on('disconnection', (client)=> {
