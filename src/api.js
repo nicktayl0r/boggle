@@ -1,5 +1,6 @@
 import io from 'socket.io-client';
-var socket = io('ws://localhost:3001', {transports: ['websocket']});
+var socket = io();
+// var socket = io('ws://localhost:3001', {transports: ['websocket']});
 // let socket = window.io.connect({ query: `user=${JSON.stringify(this.state.user)}` });
 
 
