@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import './NavBar.css'
 
 const NavBar = (props) => {
     let nav = props.user ?
@@ -16,7 +17,7 @@ const NavBar = (props) => {
     </div>;
 
     return(
-        <div>
+        <div className='NavBar'>
             {nav}
         </div>
     );

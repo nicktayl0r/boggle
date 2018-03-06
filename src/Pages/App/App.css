@@ -18,13 +18,13 @@
 
 
 .BoggleMenu > div:hover {
-    background-color: lightgrey;
-    height: 75px;
-    border: 1px solid white;
+
     transition-duration: .5s;
     transition-delay: .05s;
     cursor: pointer;
 }
+
+
 
 button {
     background-color: red;

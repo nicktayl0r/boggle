@@ -5,6 +5,16 @@
     text-decoration: none;
 }
 
+.vaporWave { 
+    text-shadow:-.07rem .07rem 0 #6BFFFF, .0625rem .0625rem 0 #FF819E;
+    color: black;
+    background-color: white;
+}
+
+.BoggleMenu {
+    margin-top: 150px;
+}
+
 a:first {
     color: black;
 }
@@ -24,6 +34,16 @@ div > a:hover {
     transition-duration: .5s;
 }
 
+
+.Home > div {
+    transition-duration: 1s
+}
+
+.Home > div:hover {
+    font-size: 20px;
+    transition-duration: .5s;
+}
+
 .BoggleMenu > div:first-child {
     background-color: white;
     color:black;
@@ -36,8 +56,13 @@ div > a:hover {
     
 }
 
-.Title {
+.Title > div {
     font-size: 49px;
     display: inline-flex;
-    
+    transition-duration: 3s;
+}
+
+.Title > div:hover {
+    font-size: 35px; 
+    transition-duration: 1s;
 }

@@ -9,12 +9,12 @@ const Home = (props) => {
     return (
         <div>
             <div className="Title">
-                <div>🅱</div>
-                <div>🅾</div>
-                <div>🅶</div>
-                <div>🅶</div>
-                <div>🅻</div>
-                <div>🅴</div>   
+                <div className="vaporWave">🅱</div>
+                <div className="vaporWave">🅾</div>
+                <div className="vaporWave">🅶</div>
+                <div className="vaporWave">🅶</div>
+                <div className="vaporWave">🅻</div>
+                <div className="vaporWave">🅴</div>   
             </div>
         <div className="BoggleMenu">
             <div className="Home">
@@ -25,7 +25,7 @@ const Home = (props) => {
             </div>
             <div className="Home"><Link to='/game'>Play Boggle</Link></div>
             <div className="Home"><Link to="/scores">High Scores</Link></div>
-            <div className="Home" onClick={props.handleOpenModal}>How to Play</div>
+            <div className="Home" onClick={props.handleOpenModal}><div>How to Play</div></div>
             <Modal
             isOpen={props.showModal}
             contentLabel="Rules of Boggle"

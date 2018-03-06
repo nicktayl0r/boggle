@@ -30,11 +30,11 @@ class Game extends React.Component {
         this.handleCloseModal = this.handleCloseModal.bind(this);
     }
     
-    handleOpenModal() {
+    handleOpenModal = () => {
         this.setState({ showModal: true });
     }
     
-    handleCloseModal() {
+    handleCloseModal = () => {
         this.setState({ showModal: false });
     }
     
@@ -92,7 +92,17 @@ class Game extends React.Component {
         }));
         let pIndex = this.state.players.indexOf(this.state.users[0]);
         if(this.state.countdown === 0){
+            let thisUser = this.state.users[0];
+            let thisScore = this.state.pWords[pIndex];
             endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
+            console.log(thisScore)
+            if(this.pScore > 0)
+            fetch('/api/scores/newScores', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ thisUser, thisScore })
+            }).then((res) => res.json())
+            .then()
             this.handleOpenModal();
         }
     }
