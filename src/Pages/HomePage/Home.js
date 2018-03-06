@@ -8,19 +8,20 @@ import './Home.css'
 const Home = (props) => {
     return (
         <div>
-        
-        <NavBar 
-            user={props.user}
-            handleLogout={props.handleLogout}
-        />
-        <div className="BoggleMenu">
-            <div className="Home">
+            <div className="Title">
                 <div>🅱</div>
                 <div>🅾</div>
                 <div>🅶</div>
                 <div>🅶</div>
                 <div>🅻</div>
                 <div>🅴</div>
+            </div>
+        <div className="BoggleMenu">
+            <div className="Home">
+                <NavBar 
+                    user={props.user}
+                    handleLogout={props.handleLogout}
+                />
             </div>
             <div className="Home"><Link to='/game'>Play Boggle</Link></div>
             <div className="Home"><Link to="/scores">High Scores</Link></div>

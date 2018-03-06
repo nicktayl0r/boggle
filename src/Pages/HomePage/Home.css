@@ -33,6 +33,11 @@ div > a:hover {
 .BoggleMenu > div > div {
     display: inline-flex;
     justify-content: space-between;
+    
+}
+
+.Title {
     font-size: 49px;
+    display: inline-flex;
     
 }
