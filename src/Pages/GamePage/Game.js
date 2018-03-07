@@ -1,11 +1,9 @@
 import React from 'react';
 import GameBoard from '../../Components/GameBoard/GameBoard';
-import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed';
 import Modal from 'react-modal';
 import GameOver from './../Modals/GameOver';
 import words from 'an-array-of-english-words';
 import './Game.css';
-import {Link} from 'react-router-dom';
 import io from 'socket.io-client';
 
 const socket = io();
