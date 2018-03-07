@@ -40,12 +40,12 @@ let users = [];
 let collection = [];
 
 class gameObject  {
-    constructor(round, roundNo, players){
+    constructor(round, roundNo, players, gameScores, gameWords){
         this.round = round;
         this.roundNo = roundNo;
         this.players = players;
         this.gameScores = gameScores;
-        this.gameWords = gameWords
+        this.gameWords = gameWords;
     }
 }
 let round;
@@ -74,7 +74,7 @@ let dice = [
 io.on('connection', (socket) => {
     console.log(`Client ${socket.id} is connected at ${new Date().toISOString()}.`);
     console.log(users);
-    socket.join('lobby')
+    socket.join('lobby');
     socket.on('return-users', (user) => {
         users.push({user: user, clientId: socket.id});
         console.log(`User ${user} is in the lobby`);
@@ -97,47 +97,42 @@ io.on('connection', (socket) => {
                 newPlayers.push(users.pop()); 
                 newPlayers.push(users.pop());
                 collection[roundNo] = new gameObject(round, roundNo, newPlayers);
-                buildGame(collection[roundNo]["roundNo"])
+                buildGame(collection[roundNo]["roundNo"]);
                 console.log(JSON.stringify(collection));
 
 
-                socket.to(`game ${roundNo}`).emit('start-game', collection[roundNo]);
+                io.to(`game ${roundNo}`).emit('start-game', collection[roundNo]);
             
             } else {
                 console.log(`the lobby has ${users.length} players`);
             }
 
         })
-        socket.on('game-over', (score, words, index) => {
-            collection[roundNo].gameScores[index] = score
-            collection[roundNo].gameWords[index] = words
+        io.on('game-over', (score, words, index) => {
+            collection[roundNo].gameScores[index] = score;
+            collection[roundNo].gameWords[index] = words;
             io.to(`game ${roundNo}`).emit('over-game', collection[roundNo]);
         })
         function  getClientsInRoom(room){
             let clients =[];
-            for(let c in io.sockets.adapter.rooms[room].sockets)
+            for(let c in io.sockets.adapter.rooms[room].sockets){
                 clients.push(io.sockets.connected[c]);
+            }
             return clients;
         }
         
         function buildGame(gameData){
-
-
-            let players = getClientsInRoom('lobby')
-            
-            players[0].leave('lobby');
+            let players = getClientsInRoom('lobby');
+           
             players[1].leave('lobby');
-            players[0].join(`game ${gameData}`);
+            players[0].leave('lobby');
             players[1].join(`game ${gameData}`);
-
+            players[0].join(`game ${gameData}`);
         }
     })
-    //at the end of a round, show who has won
-    
-    // when timer is up tally scores and notify the players of who has won
     
 io.on('disconnection', (client)=> {
-    console.log(`client ${client} has disconnected, ${users} are still connected `)
+    console.log(`client ${client} has disconnected, ${users} are still connected `);
 });
 
 

@@ -6,7 +6,9 @@ import GameOver from './../Modals/GameOver';
 import words from 'an-array-of-english-words';
 import './Game.css';
 import {Link} from 'react-router-dom';
-import {userJoin, newRound, startGame, endGame} from './../../api';
+import io from 'socket.io-client';
+
+const socket = io();
 
 class Game extends React.Component {
     constructor(props) {
@@ -22,8 +24,10 @@ class Game extends React.Component {
             showModal: false,
             winState: 0
         }
-        startGame(this.handleGame);
-        userJoin(this.state.users[0], this.getUsers);
+
+        socket.on('start-game', (game) => this.handleGame(game))
+        socket.on('users-return', (users) => this.getUsers(users));   
+        socket.emit('return-users', this.state.users[0])
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -44,6 +48,8 @@ class Game extends React.Component {
     }
 
     handleGame = (obj) => {
+        console.log(obj);
+
         let players = [];
         players.push(obj['players'][0]['user'])
         players.push(obj['players'][1]['user'])
@@ -51,7 +57,7 @@ class Game extends React.Component {
             isActive: true,
             round: obj['round'],
             players: players,
-            countdown: 20,
+            countdown: 90
         })
     }    
 
@@ -93,7 +99,14 @@ class Game extends React.Component {
         if(this.state.countdown === 0){
             let thisUser = this.state.users[0];
             let thisScore = this.state.pWords[pIndex];
-            endGame(this.handleGameOver, this.state.pScore, this.state.pWords, pIndex)
+
+      
+            
+            
+            socket.emit('game-over', this.state.pScore, this.state.pWords, pIndex)
+            socket.on('over-game',(a) => this.handleGameOver(a))
+
+            
             console.log(thisScore)
             if(this.pScore > 0)
             fetch('/api/scores/newScores', {
@@ -112,7 +125,7 @@ class Game extends React.Component {
 
     wordValidator = (word) => {
         // For a word two conditions must be met...
-        let round = this.state.round
+        let round = this.state.round;
         let wordString = word;
         let boardIndices = [];
         
