@@ -2,9 +2,15 @@ import React from 'react';
 import './PlayerFeed.css'
 
 const PlayerFeed = (props) => {
+    let words = props.pWords.map((word) => { return
+        <div>
+            {word}
+        </div>
+    })
     return (
         <div className="PlayerFeed">
-            This is a player feed
+            this is the playerfeed: see the words here
+            {props.pWords}
         </div>
     )
 };

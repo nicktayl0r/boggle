@@ -1,12 +1,12 @@
 import React from 'react';
 import GameBoard from '../../Components/GameBoard/GameBoard';
+import PlayerFeed from '../../Components/PlayerFeed/PlayerFeed';
 import Modal from 'react-modal';
 import GameOver from './../Modals/GameOver';
 import words from 'an-array-of-english-words';
 import './Game.css';
-import io from 'socket.io-client';
+import socket, { registerGameComponenet } from '../../api';
 
-const socket = io();
 
 class Game extends React.Component {
     constructor(props) {
@@ -18,15 +18,12 @@ class Game extends React.Component {
             pScore: 0,
             pWords: [],
             players: [],
-            users: [props.user.name],
+            users: [],
             showModal: false,
             winState: 0
         }
-
-        socket.on('start-game', (game) => this.handleGame(game))
-        socket.on('users-return', (users) => this.getUsers(users));   
+        registerGameComponenet(this);
         socket.emit('return-users', this.state.users[0])
-
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
     }
@@ -47,13 +44,12 @@ class Game extends React.Component {
 
     handleGame = (obj) => {
         console.log(obj);
-
         let players = [];
-        players.push(obj['players'][0]['user'])
-        players.push(obj['players'][1]['user'])
+        players.push(obj.players[0].user)
+        players.push(obj.players[1].user)
         this.setState({
             isActive: true,
-            round: obj['round'],
+            round: obj.round,
             players: players,
             countdown: 90
         })
@@ -119,6 +115,7 @@ class Game extends React.Component {
     
     componentDidMount() {
         console.log("component has mounted!");
+
     }
 
     wordValidator = (word) => {
@@ -237,12 +234,13 @@ class Game extends React.Component {
                 return neighbors;
             }
             if(isInBoard && isInDictionary && word.length > 2){
-                this.setState(() => {
-                    if(!this.state.pWords.includes(word) ){
+                if(!this.state.pWords.includes(word) ){
+                    this.setState(() => {
                         pWords: this.state.pWords.push(word);
-                        this.handleScore(word);
-                    }
-                })
+                    })
+                    this.handleScore(word);
+                }
+                () => console.log(this.state.pWords)
             }
     }
 
@@ -266,6 +264,9 @@ class Game extends React.Component {
                             handleTick={this.handleTick}
                             pScore={this.state.pScore}
                             handleScore={this.state.score}
+                        />
+                        <PlayerFeed 
+                            pWords = {this.state.pWords}
                         />
                         <Modal
                             isOpen={this.state.showModal}
