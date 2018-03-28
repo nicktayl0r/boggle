@@ -93,9 +93,6 @@ class Game extends React.Component {
         if(this.state.countdown === 0){
             let thisUser = this.state.users[0];
             let thisScore = this.state.pWords[pIndex];
-
-      
-            
             
             socket.emit('game-over', this.state.pScore, this.state.pWords, pIndex)
             socket.on('over-game',(a) => this.handleGameOver(a))
@@ -240,7 +237,7 @@ class Game extends React.Component {
                     })
                     this.handleScore(word);
                 }
-                () => console.log(this.state.pWords)
+                console.log(this.state.pWords)
             }
     }
 
